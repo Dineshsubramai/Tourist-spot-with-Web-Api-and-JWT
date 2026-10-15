@@ -12,5 +12,7 @@ namespace TouristWebApi.Dbcontext
         }
         public DbSet<place> Places { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
     }
 }
