@@ -12,6 +12,7 @@ builder.Services.AddDbContext<Tourist_DbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("TouristDb")));
 
 builder.Services.AddScoped<ITourist_service, Tourist_service>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 builder.Services.AddCors(options =>
 {
@@ -39,7 +40,7 @@ var app = builder.Build();
 
 app.UseCors("AllowFrontend");
 
-// Configure the HTTP request pipeline.
+//Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TouristWebApi.DTO;
+using TouristWebApi.Tourist_DTO;
 using TouristWebApi.Models;
 using TouristWebApi.Services;
 namespace TouristWebApi.Controllers
@@ -16,12 +16,12 @@ namespace TouristWebApi.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<IEnumerable<LoginResponseDTO>>> Login([FromBody] LoginRequestDTO tourDTO)
         {
-            var res = await loginService.PerformLogin(tourDTO.user, tourDTO.password);
-            return ok(res);
-            //if (res.Length > )
-            //    return Ok("res");
-            //else
-            //    return BadRequest("Login failed");
+            var res = loginService.PerformLogin(tourDTO.User, tourDTO.password);
+            
+            if (res == true )
+                return Ok("success");
+            else
+                return BadRequest("Login failed");
         }
         [HttpPost("CreateAccount")]
         public async Task<ActionResult<string>> CreateAccount([FromBody] LoginRequestDTO tourDTO)

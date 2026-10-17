@@ -1,8 +1,10 @@
-﻿namespace TouristWebApi.DTO
+﻿namespace TouristWebApi.Tourist_DTO
 {
-    public class LoginRequestDTO
+    
+
+    public class LoginResponseDTO
     {
-        public string user { get; set; }
-        public string password { get; set; }
+        public bool IsSuccess { get; set; }
+        public string? ErrorMsg { get; set; }
     }
 }

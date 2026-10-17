@@ -2,7 +2,9 @@
 
 namespace TouristWebApi.Models
 {
+
     public class place
+
     {
         public int Id { get; set; }
 
