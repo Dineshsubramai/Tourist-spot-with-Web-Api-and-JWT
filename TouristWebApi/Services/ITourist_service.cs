@@ -1,17 +1,14 @@
-﻿using TouristWebApi.Models;
+using TouristWebApi.Models;
 
-namespace TouristWebApi.Services
+namespace TouristWebApi.Services;
+
+public interface ITourist_service
 {
-    public interface ITourist_service
-    {
-       Task<IEnumerable<place>> GetAllPlaces();
+    Task<List<place>> GetAllPlaces();
+    Task<List<place>> GetPlacesAboveAltitude(int altitude);
 
-        Task<IEnumerable<place>> GetplaceAboveAlitude(int alitude);
+    // Kept so older callers in this solution continue to work.
+    Task<IEnumerable<place>> GetplaceAboveAlitude(int altitude);
 
-
-        Task<bool> AddPlace(place newPlace);
-        
-
-
-    }
+    Task<place> AddPlace(place newPlace);
 }

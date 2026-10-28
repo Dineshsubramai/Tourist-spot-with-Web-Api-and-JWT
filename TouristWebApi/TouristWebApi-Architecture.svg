@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1080" viewBox="0 0 900 1080" role="img" aria-labelledby="title">
+<title id="title">Tourist Web API architecture</title>
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10" fill="none" stroke="#71899f" stroke-width="1.5"/></marker><style>.box{fill:#e5f2ff;stroke:#abc9e0;stroke-width:2}.db{fill:#e1f5f0;stroke:#92cdbf;stroke-width:2}.txt{font:600 22px Arial,sans-serif;fill:#12385e}.small{font:15px Arial,sans-serif;fill:#4b6b85}.line{stroke:#71899f;stroke-width:2;marker-end:url(#a)}</style></defs>
+<rect width="900" height="1080" rx="24" fill="#f5f9ff"/>
+<text x="450" y="48" text-anchor="middle" class="txt" font-size="30">Tourist Web API</text>
+<g text-anchor="middle"><rect class="box" x="230" y="85" width="440" height="68" rx="18"/><text class="txt" x="450" y="127">ASP.NET Core Web API</text>
+<rect class="box" x="230" y="205" width="440" height="70" rx="18"/><text class="txt" x="450" y="248">JWT Authentication</text>
+<rect class="box" x="230" y="327" width="440" height="70" rx="18"/><text class="txt" x="450" y="370">Controllers</text><text class="small" x="450" y="390">Tourist and Login endpoints</text>
+<rect class="box" x="230" y="449" width="440" height="70" rx="18"/><text class="txt" x="450" y="492">DTOs and Validation</text>
+<rect class="box" x="230" y="571" width="440" height="70" rx="18"/><text class="txt" x="450" y="614">Service Layer</text>
+<rect class="box" x="230" y="693" width="440" height="70" rx="18"/><text class="txt" x="450" y="736">Entity Framework Core</text>
+<ellipse class="db" cx="450" cy="829" rx="130" ry="25"/><path class="db" d="M320 829v80c0 15 58 26 130 26s130-11 130-26v-80"/><ellipse class="db" cx="450" cy="909" rx="130" ry="25"/><text class="txt" x="450" y="850">SQL Server</text><text class="small" x="450" y="883">Tourist database</text>
+<rect class="db" x="100" y="980" width="280" height="64" rx="16"/><text class="txt" x="240" y="1020">Places</text><rect class="db" x="520" y="980" width="280" height="64" rx="16"/><text class="txt" x="660" y="1020">Users</text></g>
+<g class="line"><path d="M450 153v45"/><path d="M450 275v45"/><path d="M450 397v45"/><path d="M450 519v45"/><path d="M450 641v45"/><path d="M450 763v34"/><path d="M450 934v22h-210v18"/><path d="M450 956h210v18"/></g>
+</svg>

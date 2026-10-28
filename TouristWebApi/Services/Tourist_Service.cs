@@ -1,49 +1,41 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
 using TouristWebApi.Dbcontext;
 using TouristWebApi.Models;
 using TouristWebApi.Services;
-namespace TourWebAPI.Services
-    
+
+namespace TourWebAPI.Services;
+
+public class Tourist_service : ITourist_service
 {
-    public class Tourist_service :ITourist_service
+    private readonly Tourist_DbContext _db;
 
+    public Tourist_service(Tourist_DbContext db)
     {
-        private readonly Tourist_DbContext touristDbContext;
-
-        public Tourist_service(Tourist_DbContext _touristDbContext)
-        {
-            touristDbContext = _touristDbContext;
-        }
-
-        public async Task<IEnumerable<place>> GetAllPlaces()
-        {
-            var allPlaces = await touristDbContext.Places.ToListAsync();
-            return allPlaces;
-        }
-
-
-        public async Task<IEnumerable<place>> GetplaceAboveAlitude(int alitude)
-        {
-            var highPlaces = await touristDbContext.Places.Where(x => x.alitude > alitude).ToListAsync();
-            return highPlaces;
-        }
-
-
-        public async Task<IEnumerable<place>> GetAllPlace()
-        {
-            var AllPlaces = await touristDbContext.Places.ToListAsync();
-
-            return AllPlaces;
-        }
-
-
-        public async Task<bool> AddPlace(place newPlace)
-        {
-            await touristDbContext.Places.AddAsync(newPlace);
-            await touristDbContext.SaveChangesAsync();
-            return true;
-        }
-           
-        }
+        _db = db;
     }
+
+    public Task<List<place>> GetAllPlaces()
+    {
+        return _db.Places.AsNoTracking().ToListAsync();
+    }
+
+    public Task<List<place>> GetPlacesAboveAltitude(int altitude)
+    {
+        return _db.Places.AsNoTracking()
+            .Where(place => place.alitude > altitude)
+            .ToListAsync();
+    }
+
+    // Keep this older name for existing callers in the solution.
+    public async Task<IEnumerable<place>> GetplaceAboveAlitude(int altitude)
+    {
+        return await GetPlacesAboveAltitude(altitude);
+    }
+
+    public async Task<place> AddPlace(place newPlace)
+    {
+        _db.Places.Add(newPlace);
+        await _db.SaveChangesAsync();
+        return newPlace;
+    }
+}

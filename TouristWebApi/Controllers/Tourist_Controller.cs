@@ -1,76 +1,68 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Numerics;
-using TouristWebApi.Dbcontext;
 using TouristWebApi.Models;
 using TouristWebApi.Services;
 using TouristWebApi.Tourist_DTO;
-using TourWebAPI.Services;
 
-namespace TouristWebApi.Controllers
+namespace TouristWebApi.Controllers;
+
+[ApiController]
+[Route("api/places")]
+public class Tourist_Controller : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class Tourist_Controller : ControllerBase
+    private readonly ITourist_service _service;
+
+    public Tourist_Controller(ITourist_service service)
     {
-
-
-        private readonly Tourist_service _Tourist_service;
-
-        public Tourist_Controller(Tourist_service service)
-        {
-            _Tourist_service = service;
-
-        }
-
-        [HttpGet("GetAllPlaces")]
-        public async Task<ActionResult<IEnumerable<TouristResponseDTO>>> GetAllPlaces()
-        {
-            var allplaces = await _Tourist_service.GetAllPlaces();
-            return Ok(allplaces);
-        }
-
-
-        [HttpGet("GetHillStation")]
-        public ActionResult<IEnumerable<TouristResponseDTO>> GetHillStation(int alitude)
-        {
-            Task<IEnumerable<place>> highplaces = _Tourist_service.GetplaceAboveAlitude(alitude);
-            return Ok("Spoted");
-        }
-
-
-        [HttpPost("AddPlaces")]
-        public async Task<IActionResult> createplace(TouristResponseDTO tourDTO)
-        {
-            //if (string.IsNullOrWhiteSpace(tourDTO.description))
-            //{
-            //    return BadRequest("Description is required.");
-            //}
-
-            var newPlace = new place
-            {
-                Name=tourDTO.Name,
-                Location = tourDTO.Location,
-                alitude=tourDTO.alitude,
-                Desc = tourDTO.description
-                
-                // Map your other required properties here
-            };
-
-            var result = await _Tourist_service.AddPlace(newPlace);
-
-            return Ok(new
-            {
-                message = "Place added successfully",
-                success = result
-            });
-        }
-
-
-
-
-
-
-    }
+        _service = service;
     }
 
+    // Anyone can view all tourist places.
+    [HttpGet]
+    public async Task<ActionResult<List<place>>> GetAllPlaces()
+    {
+        return Ok(await _service.GetAllPlaces());
+    }
+
+    // New clean route: a valid JWT is needed.
+    [Authorize]
+    [HttpGet("above-altitude/{altitude:int}")]
+    public async Task<ActionResult<List<place>>> GetPlacesAboveAltitude(int altitude)
+    {
+        return Ok(await _service.GetPlacesAboveAltitude(altitude));
+    }
+
+    // Keep the previous route for clients and tests that already use it.
+    [Authorize]
+    [HttpGet("GetHillStation")]
+    public ActionResult<IEnumerable<TouristResponseDTO>> GetHillStation(int alitude)
+    {
+        var places = _service.GetplaceAboveAlitude(alitude).GetAwaiter().GetResult();
+        var result = places.Select(place => new TouristResponseDTO
+        {
+            Id = place.Id,
+            Name = place.Name,
+            Location = place.Location,
+            alitude = place.alitude,
+            description = place.Desc
+        });
+        return Ok(result);
+    }
+
+    // A valid JWT is needed to add a place.
+    [Authorize]
+    [HttpPost]
+    public async Task<ActionResult<place>> AddPlace(TouristResponseDTO dto)
+    {
+        var newPlace = new place
+        {
+            Name = dto.Name,
+            Location = dto.Location,
+            alitude = dto.alitude,
+            Desc = dto.description
+        };
+
+        var savedPlace = await _service.AddPlace(newPlace);
+        return CreatedAtAction(nameof(GetAllPlaces), new { id = savedPlace.Id }, savedPlace);
+    }
+}

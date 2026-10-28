@@ -18,8 +18,8 @@ namespace TouristWebApi.Controllers
         {
             var res = loginService.PerformLogin(tourDTO.User, tourDTO.password);
             
-            if (res == true )
-                return Ok("success");
+            if (res.Length >  2)
+                return Ok(res);
             else
                 return BadRequest("Login failed");
         }
